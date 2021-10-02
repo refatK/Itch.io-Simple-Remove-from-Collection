@@ -4,6 +4,7 @@
 // @version      0.9
 // @description  Easily remove games from your itch.io collections from within the "Add to Collection" modal of a game.
 // @author       RefatK
+// @updateURL    https://github.com/refatK/Itch.io-Simple-Remove-from-Collection/raw/main/ItchioSimpleRemoveFromCollection.user.js
 // @match        *://itch.io/*
 // @match        *://*.itch.io/*
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js
