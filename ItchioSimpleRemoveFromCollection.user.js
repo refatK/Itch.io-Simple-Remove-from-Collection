@@ -34,7 +34,7 @@ $(document).ready(function () {
 
         let gameCreator = GetUserFromGamePage(pageUrl)
         let gameName = GetGameNameFromGamePage(pageUrl)
-        GetGameId(gameCreator, gameName).then(AddAndEnableRemoveButtons())
+        GetGameIdFromItchApi(gameCreator, gameName).then(AddAndEnableRemoveButtons())
     } else {
         // wait for add-to-collection lightbox to load on any other page
         bodyObserver.observe($("body")[0], { childList: true })
@@ -45,7 +45,7 @@ $(document).ready(function () {
 
     // On click "Add To Collection" button for a game
     $('#user_tools, div[class*="game_grid_widget"]').on('click', 'a.add_to_collection_btn', function () {
-        _gameId = GetGameId(this)
+        _gameId = GetGameIdFromGameCell(this)
     });
 
     function OnBodyChange() {
@@ -74,7 +74,7 @@ $(document).ready(function () {
         return $("ul.already_in").length > 0
     }
 
-    function GetGameId(addToCollectionBtn) {
+    function GetGameIdFromGameCell(addToCollectionBtn) {
         let pageUrl = window.location.href
         let gameId = ""
         let gameCell = addToCollectionBtn.closest('div.game_cell')
@@ -88,8 +88,8 @@ $(document).ready(function () {
         return gameId
     }
 
-    async function GetGameId(gameCreator, gameName) {
-        return new Promise(function(resolve, reject) {
+    async function GetGameIdFromItchApi(gameCreator, gameName) {
+        return new Promise(function (resolve, reject) {
             Itch.getGameData({
                 user: gameCreator,
                 game: gameName,
@@ -99,7 +99,7 @@ $(document).ready(function () {
                         console.error(data)
                         reject()
                     }
-    
+
                     _gameId = data.id
                     resolve(_gameId)
                 }
