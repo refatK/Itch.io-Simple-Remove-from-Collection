@@ -29,7 +29,6 @@ $(document).ready(function () {
 
     let pageUrl = window.location.href
     if (IsAddToCollectionPage(pageUrl)) {
-        // TODO: not working in page with url like example: https://itch.io/g/tobyfox/deltarune/add-to-collection?source=home
         if (!GameInCollection()) { return }
 
         let gameCreator = GetUserFromGamePage(pageUrl)
@@ -145,10 +144,18 @@ $(document).ready(function () {
     }
 
     function GetUserFromGamePage(url) {
-        return url.split("/")[2].split(".")[0]
+        if (url.includes("?source=game")) {
+            return url.split("/")[2].split(".")[0]
+        } else {
+            return url.split("/")[4]
+        }
     }
 
     function GetGameNameFromGamePage(url) {
-        return url.split("/")[3]
+        if (url.includes("?source=game")) {
+            return url.split("/")[3]
+        } else {
+            return url.split("/")[5]
+        }
     }
 });
