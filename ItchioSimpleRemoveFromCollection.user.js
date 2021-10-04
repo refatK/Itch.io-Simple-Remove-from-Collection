@@ -28,33 +28,25 @@ $(document).ready(function () {
     _csrf = GetCsrf()
 
     let pageUrl = window.location.href
-
     if (IsAddToCollectionPage(pageUrl)) {
+        // TODO: not working in page with url like example: https://itch.io/g/tobyfox/deltarune/add-to-collection?source=home
         if (!GameInCollection()) { return }
 
         let gameCreator = GetUserFromGamePage(pageUrl)
         let gameName = GetGameNameFromGamePage(pageUrl)
 
-        // TODO: refactor duplicate code
         Itch.getGameData({
             user: gameCreator,
             game: gameName,
             onComplete: function (data) {
                 if ('errors' in data) {
+                    console.error(`ERROR: Could not find game "${gameName}" by ${gameCreator}.`)
                     console.error(data)
                     return
                 }
 
                 _gameId = data.id
-
-                $('li.already_in_row').each(function (i) {
-                    AddRemoveButton($('li.already_in_row').eq(i))
-                })
-
-                $('.remove_from_coll_btn').click(function (e) {
-                    let collId = $(this).attr("value")
-                    PostRemoveGameFromCollection(collId, _gameId, _csrf, $(this).closest('li.already_in_row'))
-                })
+                AddAndEnableRemoveButtons()
             }
         })
     } else {
@@ -81,15 +73,7 @@ $(document).ready(function () {
     // On the lightbox being loaded on the page
     function OnLightboxChange() {
         if (!GameInCollection()) { return }
-
-        $('li.already_in_row').each(function (i) {
-            AddRemoveButton($('li.already_in_row').eq(i))
-        })
-
-        $('.remove_from_coll_btn').click(function (e) {
-            let collId = $(this).attr("value")
-            PostRemoveGameFromCollection(collId, _gameId, _csrf, $(this).closest('li.already_in_row'))
-        })
+        AddAndEnableRemoveButtons()
     }
 
 
@@ -117,9 +101,8 @@ $(document).ready(function () {
         return gameId
     }
 
-    function AddRemoveButton(collectionLinkEl) {
+    function AddRemoveButtonUi(collectionLinkEl) {
         let collectionId = collectionLinkEl.find("a").prop("href").split("/")[4]
-        // TODO: use style margin instead of nbsp
         const removeHTML = $(`<a class="remove_from_coll_btn button outline" title="Remove the game from the collection." value="${collectionId}">❌</a>`)
         removeHTML.css({
             "margin-right": "5px",
@@ -146,6 +129,17 @@ $(document).ready(function () {
         });
     }
 
+    function AddAndEnableRemoveButtons() {
+        $('li.already_in_row').each(function (i) {
+            AddRemoveButtonUi($('li.already_in_row').eq(i))
+        })
+        // Add click event for the newly added remove buttons
+        $('.remove_from_coll_btn').click(function (e) {
+            let collId = $(this).attr("value")
+            PostRemoveGameFromCollection(collId, _gameId, _csrf, $(this).closest('li.already_in_row'))
+        })
+    }
+
     function IsAddToCollectionPage(url) {
         return url.includes("add-to-collection")
     }
@@ -157,13 +151,4 @@ $(document).ready(function () {
     function GetGameNameFromGamePage(url) {
         return url.split("/")[3]
     }
-
-
-    // --- FOR DEBUGGING ---
-    var showDebugMessages = true;
-
-    function log(message) {
-        if (showDebugMessages) { console.log(message); }
-    }
-
 });
