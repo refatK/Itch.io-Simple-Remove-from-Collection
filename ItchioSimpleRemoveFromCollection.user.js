@@ -28,26 +28,13 @@ $(document).ready(function () {
     _csrf = GetCsrf()
 
     let pageUrl = window.location.href
+
     if (IsAddToCollectionPage(pageUrl)) {
-        if (!GameInCollection()) { return }
+        if (!IsGameInAnyCollection()) { return }
 
         let gameCreator = GetUserFromGamePage(pageUrl)
         let gameName = GetGameNameFromGamePage(pageUrl)
-
-        Itch.getGameData({
-            user: gameCreator,
-            game: gameName,
-            onComplete: function (data) {
-                if ('errors' in data) {
-                    console.error(`ERROR: Could not find game "${gameName}" by ${gameCreator}.`)
-                    console.error(data)
-                    return
-                }
-
-                _gameId = data.id
-                AddAndEnableRemoveButtons()
-            }
-        })
+        GetGameId(gameCreator, gameName).then(AddAndEnableRemoveButtons())
     } else {
         // wait for add-to-collection lightbox to load on any other page
         bodyObserver.observe($("body")[0], { childList: true })
@@ -65,13 +52,14 @@ $(document).ready(function () {
         // observe lightbox div once loaded on the page
         if ($("div#lightbox_container").length > 0) {
             lightboxObserver.observe($("div#lightbox_container")[0], { childList: true })
+            // lightbox container stays loaded now, so we can stop observing for it to load
             bodyObserver.disconnect()
         }
     }
 
     // On the lightbox being loaded on the page
     function OnLightboxChange() {
-        if (!GameInCollection()) { return }
+        if (!IsGameInAnyCollection()) { return }
         AddAndEnableRemoveButtons()
     }
 
@@ -82,7 +70,7 @@ $(document).ready(function () {
         return $("meta[name=csrf_token]").attr("value")
     }
 
-    function GameInCollection() {
+    function IsGameInAnyCollection() {
         return $("ul.already_in").length > 0
     }
 
@@ -98,6 +86,25 @@ $(document).ready(function () {
         }
 
         return gameId
+    }
+
+    async function GetGameId(gameCreator, gameName) {
+        return new Promise(function(resolve, reject) {
+            Itch.getGameData({
+                user: gameCreator,
+                game: gameName,
+                onComplete: function (data) {
+                    if ('errors' in data) {
+                        console.error(`ERROR: Could not find game "${this.user}" by ${this.game}.`)
+                        console.error(data)
+                        reject()
+                    }
+    
+                    _gameId = data.id
+                    resolve(_gameId)
+                }
+            })
+        })
     }
 
     function AddRemoveButtonUi(collectionLinkEl) {
