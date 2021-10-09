@@ -10,7 +10,7 @@
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js
 // @require      https://static.itch.io/api.js
 // @grant        unsafeWindow
-// @grant        GM_xmlhttpRequest
+// @grant        GM.xmlHttpRequest
 // @connect      itch.io
 // @run-at       document-end
 // ==/UserScript==
@@ -119,7 +119,7 @@ $(document).ready(function () {
     }
 
     function PostRemoveGameFromCollection(collectionId, gameId, csrf_token, elToHideOnSuccess) {
-        GM_xmlhttpRequest({
+        GM.xmlHttpRequest({
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             url: `https://itch.io/collection/${collectionId}/remove/${gameId}`,
