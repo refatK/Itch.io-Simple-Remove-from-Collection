@@ -5,7 +5,7 @@ Easily remove games from your itch.io collections from within the "Add to Collec
 
 ## INSTALLATION
 
-1. Install [Tampermonkey](https://www.tampermonkey.net/) browser extension.
+1. Install [Tampermonkey](https://www.tampermonkey.net/)/[Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) browser extension.
 2. Click [HERE](https://github.com/refatK/Itch.io-Simple-Remove-from-Collection/raw/main/ItchioSimpleRemoveFromCollection.user.js) and you should be prompted to install the script.
 
 ## PURPOSE

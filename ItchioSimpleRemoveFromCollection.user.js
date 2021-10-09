@@ -1,7 +1,8 @@
 // ==UserScript==
 // @name         Itch.io Simple Remove from Collection
 // @namespace    https://github.com/refatK
-// @version      0.9
+// @version      1.0
+// @homepageURL  https://github.com/refatK/Itch.io-Simple-Remove-from-Collection
 // @description  Easily remove games from your itch.io collections from within the "Add to Collection" modal of a game.
 // @author       RefatK
 // @updateURL    https://github.com/refatK/Itch.io-Simple-Remove-from-Collection/raw/main/ItchioSimpleRemoveFromCollection.user.js
