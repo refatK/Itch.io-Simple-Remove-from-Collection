@@ -1,7 +1,8 @@
 // ==UserScript==
 // @name         Itch.io Simple Remove from Collection
 // @namespace    https://github.com/refatK
-// @version      0.9
+// @version      1.0
+// @homepageURL  https://github.com/refatK/Itch.io-Simple-Remove-from-Collection
 // @description  Easily remove games from your itch.io collections from within the "Add to Collection" modal of a game.
 // @author       RefatK
 // @updateURL    https://github.com/refatK/Itch.io-Simple-Remove-from-Collection/raw/main/ItchioSimpleRemoveFromCollection.user.js
@@ -10,7 +11,7 @@
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js
 // @require      https://static.itch.io/api.js
 // @grant        unsafeWindow
-// @grant        GM_xmlhttpRequest
+// @grant        GM.xmlHttpRequest
 // @connect      itch.io
 // @run-at       document-end
 // ==/UserScript==
@@ -119,7 +120,7 @@ $(document).ready(function () {
     }
 
     function PostRemoveGameFromCollection(collectionId, gameId, csrf_token, elToHideOnSuccess) {
-        GM_xmlhttpRequest({
+        GM.xmlHttpRequest({
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             url: `https://itch.io/collection/${collectionId}/remove/${gameId}`,
