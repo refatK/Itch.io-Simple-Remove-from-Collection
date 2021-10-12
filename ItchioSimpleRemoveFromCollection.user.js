@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Itch.io Simple Remove from Collection
 // @namespace    https://github.com/refatK
-// @version      1.0
+// @version      1.0.1
 // @homepageURL  https://github.com/refatK/Itch.io-Simple-Remove-from-Collection
 // @description  Easily remove games from your itch.io collections from within the "Add to Collection" modal of a game.
 // @author       RefatK
+// @license      MIT
 // @updateURL    https://github.com/refatK/Itch.io-Simple-Remove-from-Collection/raw/main/ItchioSimpleRemoveFromCollection.user.js
 // @match        *://itch.io/*
 // @match        *://*.itch.io/*
@@ -16,6 +17,7 @@
 // @run-at       document-end
 // ==/UserScript==
 
+/* jshint esversion: 8 */
 /* global $, Itch */
 $(document).ready(function () {
     const GAME_URL_REGEX = "/https:\/\/.+\.itch\.io/g"
@@ -45,7 +47,7 @@ $(document).ready(function () {
     // --- EVENTS ---
 
     // On click "Add To Collection" button for a game
-    $('#user_tools, div[class*="game_grid_widget"]').on('click', 'a.add_to_collection_btn', function () {
+    $('div, #user_tools').on('click', 'a.add_to_collection_btn', function () {
         _gameId = GetGameIdFromGameCell(this)
     });
 
