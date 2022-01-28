@@ -1,4 +1,4 @@
-# Itch.io Simple Remove from Collection
+# [Itch.io Simple Remove from Collection](https://refat17.itch.io/itchio-simple-remove-from-collection)
 
 Easily remove games from your itch.io collections from within the "Add to Collection" modal of a game.
 ![itchSimpleRemoveSample](https://user-images.githubusercontent.com/31963426/135940732-7f1b0dae-297d-406a-ad08-7a9e22ef87fc.gif)
