@@ -1,12 +1,11 @@
 // ==UserScript==
 // @name         Itch.io Simple Remove from Collection
 // @namespace    https://github.com/refatK
-// @version      1.0.1
+// @version      1.0.2
 // @homepageURL  https://github.com/refatK/Itch.io-Simple-Remove-from-Collection
 // @description  Easily remove games from your itch.io collections from within the "Add to Collection" modal of a game.
 // @author       RefatK
 // @license      MIT
-// @updateURL    https://github.com/refatK/Itch.io-Simple-Remove-from-Collection/raw/main/ItchioSimpleRemoveFromCollection.user.js
 // @match        *://itch.io/*
 // @match        *://*.itch.io/*
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js
@@ -18,7 +17,7 @@
 // ==/UserScript==
 
 /* jshint esversion: 8 */
-/* global $, Itch */
+/* global $, Itch, I */
 $(document).ready(function () {
     const GAME_URL_REGEX = "/https:\/\/.+\.itch\.io/g"
     const bodyObserver = new MutationObserver(OnBodyChange);
@@ -122,20 +121,23 @@ $(document).ready(function () {
     }
 
     function PostRemoveGameFromCollection(collectionId, gameId, csrf_token, elToHideOnSuccess) {
-        GM.xmlHttpRequest({
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            url: `https://itch.io/collection/${collectionId}/remove/${gameId}`,
-            data: `csrf_token=${csrf_token}`,
-            onload: function (res) {
-                let resJson = JSON.parse(res.responseText)
-                if (resJson.removed) {
-                    elToHideOnSuccess.remove()
-                } else {
-                    console.error(res.responseText)
-                }
+        $.ajaxSetup({
+            crossDomain: true,
+            xhrFields: {
+                withCredentials: true
             },
         });
+        $.post(`https://itch.io/collection/${collectionId}/remove/${gameId}`, I.with_csrf())
+        .done(function(res) {
+            elToHideOnSuccess.remove()
+        })
+        .fail(function(res) {
+            alert("Failed to remove from collection. Check browser console for details.")
+            console.log(res)
+        })
+        .always(function(res) {
+            ;
+        })
     }
 
     function AddAndEnableRemoveButtons() {
